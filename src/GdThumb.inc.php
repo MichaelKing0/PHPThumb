@@ -96,26 +96,27 @@ class GdThumb extends ThumbBase
 		parent::__construct($fileName, $isDataStream);
 		
 		$this->determineFormat();
+		$this->verifyFormatCompatiblity();
 		
 		if ($this->isDataStream === false)
 		{
-			$this->verifyFormatCompatiblity();
-		}
-		
-		switch ($this->format)
+			switch ($this->format)
+			{
+				case 'GIF':
+					$this->oldImage = imagecreatefromgif($this->fileName);
+					break;
+				case 'JPG':
+					$this->oldImage = imagecreatefromjpeg($this->fileName);
+					break;
+				case 'PNG':
+					$this->oldImage = imagecreatefrompng($this->fileName);
+					break;
+			}
+		} 
+
+		else
 		{
-			case 'GIF':
-				$this->oldImage = imagecreatefromgif($this->fileName);
-				break;
-			case 'JPG':
-				$this->oldImage = imagecreatefromjpeg($this->fileName);
-				break;
-			case 'PNG':
-				$this->oldImage = imagecreatefrompng($this->fileName);
-				break;
-			case 'STRING':
-				$this->oldImage = imagecreatefromstring($this->fileName);
-				break;
+			$this->oldImage = imagecreatefromstring($this->fileName);
 		}
 	
 		$this->currentDimensions = array
@@ -1465,7 +1466,9 @@ class GdThumb extends ThumbBase
 	{
 		if ($this->isDataStream === true)
 		{
-			$this->format = 'STRING';
+			$data = getimagesizefromstring($this->fileName);
+			$this->format = strtoupper(image_type_to_extension($data[2], false));
+			if ($this->format == 'JPEG') $this->format = 'JPG';
 			return;
 		}
 		
