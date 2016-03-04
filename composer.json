@@ -1,7 +1,7 @@
 {
-	"name": "weotch/phpthumb",
-	"description": "Fork of PHPThumb that adds auto-image rotation based on EXIF data and composer support",
-	"authors": [{"name": "Robert Reinhard"}],
+	"name": "michaelking0/phpthumb",
+	"description": "Fork of PHPThumb that adds a fix for combination of adaptiveResize and resizeUp issues.",
+	"authors": [{"name": "Michael King"}],
 	"license": "MIT",
 	"autoload": {
         "classmap": ["src/"]
