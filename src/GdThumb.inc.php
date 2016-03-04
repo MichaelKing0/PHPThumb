@@ -227,9 +227,11 @@ class GdThumb extends ThumbBase
 	 * 
 	 * @param int $maxWidth The maximum width of the image in pixels
 	 * @param int $maxHeight The maximum height of the image in pixels
+	 * @param bool $calcImageSizeStrict
+	 * @throws \InvalidArgumentException
 	 * @return GdThumb
 	 */
-	public function resize ($maxWidth = 0, $maxHeight = 0)
+	public function resize ($maxWidth = 0, $maxHeight = 0, $calcImageSizeStrict = true)
 	{
 		// make sure our arguments are valid
 		if (!is_numeric($maxWidth))
@@ -256,6 +258,12 @@ class GdThumb extends ThumbBase
 		
 		// get the new dimensions...
 		$this->calcImageSize($this->currentDimensions['width'], $this->currentDimensions['height']);
+
+		if ($calcImageSizeStrict === true) {
+			$this->calcImageSizeStrict($this->currentDimensions['width'], $this->currentDimensions['height']);
+		} else {
+			$this->calcImageSize($this->currentDimensions['width'], $this->currentDimensions['height']);
+		}
 		
 		// create the working image
 		if (function_exists('imagecreatetruecolor'))
